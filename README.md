@@ -15,7 +15,7 @@
 
 ## 今回作成する構成図
 VPC(sb2つ,各SG,EP),EC2,RDS,ALB,S3
-![構成図](https://raw.githubusercontent.com/Hiro-Nagai/tf.study/main/image%2018.45.27.png)
+![構成図](https://raw.githubusercontent.com/Hiro-Nagai/tf.learn/main/image%2018.45.27.png)
 
 ## フォルダ構成
 
@@ -59,13 +59,13 @@ VPC(sb2つ,各SG,EP),EC2,RDS,ALB,S3
 
 * ユーザ名のディレクトリの下に以下の手順でディレクトリ作成
 ```bash
-$ mkdir ~/tf.study/
+$ mkdir ~/tf.learn/
 ```
 * 先にGitHubでリモートリポジトリを作成してローカルに"git clone"で降ろすとこから始める
 ```bash
 # <最上階のフォルダ作成>
-$ git clone https://github.com/username/tf.study.git
-$ cd tf.study
+$ git clone https://github.com/username/tf.learn.git
+$ cd tf.learn
 $ mkdir modules && cd $_
 $ touch aws-vpc.tf aws-sg.tf aws-ec2.tf aws-rds.tf aws-alb.tf aws-s3.tf variables.tf
 # <stgのフォルダ作成>
@@ -74,16 +74,16 @@ $ cd ../stg
 $ touch main.tf
 $ cd ../
 $ pwd
-/c/Users/username/tf.study
+/c/Users/username/tf.learn
 # <当該ディレクトリではこのバージョンで使うことを指定>
 $ tfenv pin 
-Pinned version by writing "1.8.5" to /c/Users/username/tf.study/.terraform-version
+Pinned version by writing "1.8.5" to /c/Users/username/tf.learn/.terraform-version
 $ ls -al | grep .terra
 $ cat .terraform-version
 1.7.0
 $ cd ../
 $ pwd
-/c/Users/username/tf.study
+/c/Users/username/tf.learn
 ```
 
 
@@ -92,16 +92,16 @@ $ pwd
 
 先に以下のコマンドでS3バケットを生成しておく
 ```bash
-$ aws s3 mb s3://tf.study
-make_bucket: tf.study
+$ aws s3 mb s3://tf.learn
+make_bucket: tf.learn
 ```
 backendの定義をmain.tfに追記
 ```bash
 # backendの定義
 terraform {
   backend "s3" {
-    bucket = "tf.study"
-    key = "tf.study/stg/terraform.tfstate"
+    bucket = "tf.learn"
+    key = "tf.learn/stg/terraform.tfstate"
     region = "ap-northeast-1"
   }
 }
@@ -182,19 +182,47 @@ $ terraform apply
 </details>
 
 
-## 結果を検証-terraform destroyまで
+## 手順4-terraform apply
+terrform applyの際、エラーあり（定義がない、インデントずれ、変数が違うetc）
+ほぼ文法間違いのくだらないミスエラー。terraform公式で対応
+
+
+### terraform apply 完了
+
+## 手順5-結果を検証-terraform destroyまで
 検証対象
-  -EC2→SSH接続で
-  -RDS→EC2から
-  -ALB
+  -EC2  →   SSH接続で
+  -RDS  →   EC2からRDS(mysql)への接続
+  -ALB  →   EC2内でNginx起動させ、ALBのDNSを入力して確認
 
 <details><summary>(詳細)検証した結果</summary>
 
-#### Nginx起動確認
+#### SSH接続
+22ポートの記述もれあり。02-sg.tfの"sg_ec2"に以下追記
+
 ```bash
+    ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+```
+マネコン画面EC2→keypairにて発行
+.sshにDLしたKeyPairファイル入れて以下実行
+
+```bash
+ssh -i ~/.ssh/(KeyPair).pem ec2-user@(Public IPv4 DNS).ap-northeast-1.compute.amazonaws.com
+```
+※今回はEIPを使っていないので”Public IPv4 DNS”はEC2起動ごとに変化するので注意
+
+#### RDS接続＆Nginx起動確認
+```bash
+#　※EC2接続状態で
+#　<RDS接続確認>
 $ sudo yum update
 $ sudo yum install mysql
-$ mysql -u admin -p -h ★RDSのエンドポイント★
+$ mysql -u admin -p -h (RDSのエンドポイント)
 #Parameter Storeに保管しているパスワードを入力
 Welcome to the MariaDB monitor.  Commands end with ; or \g.
 Your MySQL connection id is 21
@@ -205,6 +233,7 @@ Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
 
 MySQL [(none)]> exit
 Bye
+#　<Nginx起動>
 $ amazon-linux-extras list | grep nginx
 $ sudo amazon-linux-extras install nginx1
 $ nginx -v
@@ -213,7 +242,8 @@ $ sudo systemctl start nginx
 $ sudo systemctl status nginx
 $ sudo systemctl enable nginx
 $ systemctl is-enabled nginx
-$ curl http://alb-tf-625564651.ap-northeast-1.elb.amazonaws.com/
+#　<ALB動作確認>
+$ curl http://alb-tf-*********.ap-northeast-1.elb.amazonaws.com/(DNS name)
 <!DOCTYPE html>
 <html>
 <head>
@@ -250,7 +280,7 @@ https://docs.aws.amazon.com/cli/latest/reference/resourcegroupstaggingapi/get-re
 ```bash
 $ aws resourcegroupstaggingapi get-resources --no-paginate --region ap-northeast-1 \
 --tag-filters Key=Name,\
-Values=20240105-terraform-stage,20240105-terraform-stage-public-1a-sn,20240105-terraform-stage-public-1c-sn
+Values=terraform-stg,terraform-stg-public-1a-sn,terraform-stg-public-1c-sn
 ```
 取得した値は以下（多いので抜粋）※イメージ湧かせるために抜粋だけでも記載
 ```json
@@ -281,7 +311,9 @@ https://docs.aws.amazon.com/cli/latest/reference/elbv2/modify-load-balancer-attr
 ```bash
 aws elbv2 modify-load-balancer-attributes --load-balancer-arn arn:aws:elasticloadbalancing:ap-northeast-1:************:loadbalancer/app/alb-tf/036cf7d537523dd9 --attributes Key=access_logs.s3.enabled,Value=false
 ```
-※「**********」はarn伏せ
+※「**********」はarn伏せ字
+
+
 以下のように返され、マネコンでもアクセスログがオフになっている。ALBの「Attributes属性」情報で他パラメータも含めて返っている。
 ```json
 {
@@ -292,7 +324,7 @@ aws elbv2 modify-load-balancer-attributes --load-balancer-arn arn:aws:elasticloa
         },
         {
             "Key": "access_logs.s3.bucket",
-            "Value": "s3-alb-log240604tf"
+            "Value": "s3-alb-log-tf"
         },
         {
             "Key": "access_logs.s3.prefix",
@@ -361,7 +393,7 @@ aws elbv2 modify-load-balancer-attributes --load-balancer-arn arn:aws:elasticloa
 
 ##### ALBのアクセスログ用のS3バケット内を空にする
 ```bash
-$ aws s3 rm s3://s3-alb-log240104tf --recursive
+$ aws s3 rm s3://s3-alb-log-tf --recursive
 ```
 
 
@@ -499,7 +531,7 @@ aws rds delete-db-instance \
 
 </details>
 
-### 簡易的な結果確認
+
 
 ## 学んだこと
 
