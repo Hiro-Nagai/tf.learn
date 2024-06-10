@@ -278,7 +278,8 @@ $ exit
 * 今回Terraformで作ったリソースはtagを入れているので、tagがついたリソースを、AWS CLIで取得
   * 公式）https://awscli.amazonaws.com/v2/documentation/api/latest/reference/resourcegroupstaggingapi/get-resources.html
 
-まずはリソースの情報取得
+<details><summary>まずはリソースの情報取得</summary>
+
 https://docs.aws.amazon.com/cli/latest/reference/resourcegroupstaggingapi/get-resources.html
 ```bash
 $ aws resourcegroupstaggingapi get-resources --no-paginate --region ap-northeast-1 \
@@ -307,8 +308,10 @@ Values=terraform-stg,terraform-stg-public-1a-sn,terraform-stg-public-1c-sn
         },
 
 ```
+</details>
 
-##### ALBのアクセスログをオフにする
+
+##### <details><summary>ALBのアクセスログをオフにする</summary>
 ALBのアクセスログがS3バケットに過剰に溜まる。まずは、ログの蓄積を解除する。
 https://docs.aws.amazon.com/cli/latest/reference/elbv2/modify-load-balancer-attributes.html
 ```bash
@@ -393,12 +396,14 @@ aws elbv2 modify-load-balancer-attributes --load-balancer-arn arn:aws:elasticloa
 }
 ```
 
+</details>
 
 ##### ALBのアクセスログ用のS3バケット内を空にする
 ```bash
 $ aws s3 rm s3://s3-alb-log-tf --recursive
 ```
 
+##### <details><summary>各インスタンス削除</summary>
 
 ##### VPC内にあるEC2インスタンスを削除
 * 公式）https://docs.aws.amazon.com/cli/latest/reference/ec2/terminate-instances.html
@@ -527,6 +532,8 @@ aws rds delete-db-instance \
     }
 }
 ```
+
+</details>
 
 ##### 一旦ここまでで`terraform destroy`完了
 * Terraformで作ったリソースはすべて削除できた。
