@@ -5,7 +5,7 @@
 ############
 # リソース定義
 ############
-# albの後ろのEC2（webサーバ）用のsg：HTTP(80ポート)
+# albの後ろのEC2（webサーバ）用のsg：HTTP(80ポート),SSH接続(22ポート)
 resource "aws_security_group" "sg_ec2" {
   name        = "sg_ec2"
   description = "sg_ec2"
