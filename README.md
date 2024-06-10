@@ -396,12 +396,12 @@ aws elbv2 modify-load-balancer-attributes --load-balancer-arn arn:aws:elasticloa
 }
 ```
 
-</details>
 
 ##### ALBのアクセスログ用のS3バケット内を空にする
 ```bash
 $ aws s3 rm s3://s3-alb-log-tf --recursive
 ```
+</details>
 
 ##### <details><summary>各インスタンス削除</summary>
 
@@ -532,7 +532,6 @@ aws rds delete-db-instance \
     }
 }
 ```
-
 </details>
 
 ##### 一旦ここまでで`terraform destroy`完了
