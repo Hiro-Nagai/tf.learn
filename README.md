@@ -12,7 +12,7 @@
    1. 多くのWeb系企業がこれをやっているイメージ。ざっくり調べたがだいたいこの３つ　１モジュールごと　２環境ごと　３大規模(１と２ミックスの上さらに細かく各ファイル設定されている)。
    2. 各リソースがモジュールとして分離されているので、疎結合で構築ができる。実際の開発現場でも、モジュールごとに開発することがあれば便利そう
    3. workspaceなど他にも構成があるが、直感的にこっちの方がわかりやすい
-* 参考：[0から始めるTerraformの学習方法AWS/完全版]https://raw.githubusercontent.com/Hiro-Nagai/tf.learn/main/image.tf.learn.png
+* 参考：[0から始めるTerraformの学習方法AWS/完全版](https://raw.githubusercontent.com/Hiro-Nagai/tf.learn/main/image.tf.learn.png)
 
 ## 今回作成する構成図
 VPC(sb2つ,各SG,EP),EC2,RDS,ALB,S3
@@ -561,4 +561,4 @@ aws rds delete-db-instance \
 - 単純にTerraform文法についていけなかった。インフラエンジニアでもコード書く必要性を実感。
 - terraform destroy実行で、全自動で削除できる時と手動でインスタンスを削除しないとできない時がある。調べたがまだしっくりこない。
 
-
+### ハマったエラー(概要)
