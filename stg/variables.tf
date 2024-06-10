@@ -6,4 +6,4 @@ variable "region" {
   description = "AWS region"
 }
 
-
+variable "mysqlusername" {}
