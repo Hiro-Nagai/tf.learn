@@ -191,9 +191,9 @@ terrform applyの際、エラーあり（定義がない、インデントずれ
 
 ## 手順5-結果を検証-terraform destroyまで
 検証対象
-  -EC2  →   SSH接続で
-  -RDS  →   EC2からRDS(mysql)への接続
-  -ALB  →   EC2内でNginx起動させ、ALBのDNSを入力して確認
+  - EC2  →   SSH接続で
+  - RDS  →   EC2からRDS(mysql)への接続
+  - ALB  →   EC2内でNginx起動させ、ALBのDNSを入力して確認
 
 <details><summary>(詳細)検証した結果</summary>
 
