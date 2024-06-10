@@ -1,1 +1,1 @@
-# tf.learn
+# ルビコン塾CloudFormationで構築した環境をTerraformで構築する
