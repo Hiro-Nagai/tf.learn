@@ -1,3 +1,4 @@
+# data定義：EC2キーペア、rdsユーザ、s3アカIDポリシー
 
 
 ############
@@ -5,7 +6,7 @@
 ############
 #System ManegerのParameter Storeに保管しているPWを取得　※予め作成すること
 #ParameterStore→無料　SecretManager→有料　∴　ParameterStoreにした
-#現場で書くなら変数扱いにしたほうがいいと思います
+#現場で書くなら変数扱いにしたほうがいい
 data "aws_ssm_parameter" "ssm_paramstr_pw_tf" {
   name            = "RDSMasterPassword"
   with_decryption = true
