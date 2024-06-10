@@ -42,7 +42,7 @@ module "aws-modules" {
   vpc_cidr_block = "10.0.0.0/16"
 
   # EC2定義
-  ec2key_name      = "hiro-nagai"
+  ec2key_name      = "hatopo"
   ec2instance_type = "t2.micro"
 
   # DB定義
