@@ -25,6 +25,12 @@ resource "aws_security_group" "sg_ec2" {
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
+    ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
 }
 # ALB用のsg：HTTP(80ポート)HTTPs(443ポート)
 resource "aws_security_group" "sg_alb" {
