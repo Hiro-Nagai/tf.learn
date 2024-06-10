@@ -270,6 +270,9 @@ Commercial support is available at
 $ exit
 ```
 
+</details>
+
+
 ## 手順6-terraform destroy
 ##### リソース情報取得-削除対象を認識する
 * 今回Terraformで作ったリソースはtagを入れているので、tagがついたリソースを、AWS CLIで取得
@@ -528,7 +531,6 @@ aws rds delete-db-instance \
 ##### 一旦ここまでで`terraform destroy`完了
 * Terraformで作ったリソースはすべて削除できた。
 
-</details>
 
 
 
