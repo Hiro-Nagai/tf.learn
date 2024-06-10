@@ -88,7 +88,7 @@ $ pwd
 
 
 ## 手順２-Backend機能を使う
-目的としては、tfstateをS3に置いて、チームで共有できるようにする。
+目的としては、tfstateをS3に置くことで、変更履歴をチームで共有/追跡できるようにする。
 
 先に以下のコマンドでS3バケットを生成しておく
 ```bash
@@ -189,10 +189,10 @@ terrform applyの際、エラーあり（定義がない、インデントずれ
 
 ### terraform apply 完了
 
-## 手順5-結果を検証-terraform destroyまで
+## 手順5-結果を検証
 検証対象
-  - EC2  →   SSH接続で
-  - RDS  →   EC2からRDS(mysql)への接続
+  - EC2  →   SSH接続で確認
+  - RDS  →   EC2からRDS(mysql)への接続で確認
   - ALB  →   EC2内でNginx起動させ、ALBのDNSを入力して確認
 
 <details><summary>(詳細)検証した結果</summary>
@@ -270,7 +270,7 @@ Commercial support is available at
 $ exit
 ```
 
-#### インフラ削除-terraform destoyを実行する
+## 手順6-terraform destroy
 ##### リソース情報取得-削除対象を認識する
 * 今回Terraformで作ったリソースはtagを入れているので、tagがついたリソースを、AWS CLIで取得
   * 公式）https://awscli.amazonaws.com/v2/documentation/api/latest/reference/resourcegroupstaggingapi/get-resources.html
@@ -525,19 +525,24 @@ aws rds delete-db-instance \
 }
 ```
 
-##### 一旦ここまでで`terraform destroy`
-* Terraformで作ったリソースはすべて削除できた。(バージョンによっては、手動でのリソーセス削除が不要で、"terraform destroy"のみで削除できるらしい)
-
+##### 一旦ここまでで`terraform destroy`完了
+* Terraformで作ったリソースはすべて削除できた。
 
 </details>
 
 
 
 ## 学んだこと
+* Terraformを学習することで、CFnの各リソーセスをより細かに見ることができた。
+* CloudFormationと比較したTerraformの特徴を、主観で以下にメモ。
+  * 便利ではあるが、どのリソーセスを作ったかが見えにくい（CFnはマネコンでわかる）。タグの有効活用で"tf"など名付けルールを徹底すべき
+  * 変数定義を各リソースのファイルではなく、別のファイルでまとめられるので、環境ごとの定義が変更しやすい
+  * Outputを記述しなくても、他リソースのidやarnなどを引用することができる。でもOutputあったほうが整理されてて見やすい
+* AzureやGCPなどほかのクラウドインフラにも挑戦して、Terraformで実行してみたい。
 
-
-### ハマったエラー
-
-
+### ハマったエラー(概要)
+- terraform initで生成されるファイルが重すぎてgit pushできない。.gitignoreに入れるのも苦労した
+- 単純にTerraform文法についていけなかった。インフラエンジニアでもコード書く必要性を実感。
+- terraform destroy実行で、全自動で削除できる時と手動でインスタンスを削除しないとできない時がある。調べたがまだしっくりこない。
 
 
