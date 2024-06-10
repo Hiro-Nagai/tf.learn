@@ -311,9 +311,9 @@ Values=terraform-stg,terraform-stg-public-1a-sn,terraform-stg-public-1c-sn
 </details>
 
 
-##### ALBのアクセスログをオフにする
 
-<details><summary>ALBのアクセスログがS3バケットに過剰に溜まる。まずは、ログの蓄積を解除する。</summary>
+<details><summary>ALBのアクセスログをオフにする</summary>
+ALBのアクセスログがS3バケットに過剰に溜まる。まずは、ログの蓄積を解除する。
 
 https://docs.aws.amazon.com/cli/latest/reference/elbv2/modify-load-balancer-attributes.html
 ```bash
