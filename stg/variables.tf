@@ -7,4 +7,3 @@ variable "region" {
 }
 
 variable "mysqlusername" {}
-  
