@@ -407,7 +407,6 @@ $ aws s3 rm s3://s3-alb-log-tf --recursive
 
 
 
-##### 各インスタンス削除
 <details><summary>各インスタンス削除</summary>
 
 ##### VPC内にあるEC2インスタンスを削除
@@ -542,7 +541,7 @@ aws rds delete-db-instance \
 
 
 
-##### 一旦ここまでで`terraform destroy`完了
+##### ここまでで`terraform destroy`完了
 * Terraformで作ったリソースはすべて削除できた。
 
 
