@@ -277,7 +277,7 @@ $ exit
 </details>
 
 
-#### 手順6-terraform destroy
+### 手順6-terraform destroy
 ##### リソース情報取得-削除対象を認識する
 * 今回Terraformで作ったリソースはtagを入れているので、tagがついたリソースを、AWS CLIで取得
   * 公式）https://awscli.amazonaws.com/v2/documentation/api/latest/reference/resourcegroupstaggingapi/get-resources.html
