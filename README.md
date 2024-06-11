@@ -56,9 +56,10 @@ VPC(sb2つ,各SG,EP),EC2,RDS,ALB,S3
 
 ```
 
-## 実際の手順
+## 実際の手順(全6手順)
 
-### 手順１-準備　空フォルダ作成
+
+### ＜手順１＞-準備　空フォルダ作成
 
 * ユーザ名のディレクトリの下に以下の手順でディレクトリ作成
 ```bash
@@ -91,7 +92,7 @@ $ pwd
 
 
 
-### 手順２-Backend機能を使う
+### ＜手順２＞-Backend機能を使う
 目的としては、tfstateをS3に置くことで、変更履歴をチームで共有/追跡できるようにする。
 
 先に以下のコマンドでS3バケットを生成しておく
@@ -112,7 +113,7 @@ terraform {
 ```
 
 
-### 手順3-各moduleを作成
+### ＜手順3＞-各moduleを作成
 stgのディレクトリで`terraform init`してから以下の順に操作
 ```bash
 $ terraform fmt
@@ -186,14 +187,14 @@ $ terraform apply
 </details>
 
 
-### 手順4-terraform apply
+### ＜手順4＞-terraform apply
 terrform applyの際、エラーあり（定義がない、インデントずれ、変数が違うetc）
 ほぼ文法間違いのくだらないミスエラー。terraform公式で対応
 
 
 #### terraform apply 完了
 
-### 手順5-結果を検証
+### ＜手順5＞-結果を検証
 検証対象
   - EC2  →   SSH接続で確認
   - RDS  →   EC2からRDS(mysql)への接続で確認
@@ -277,7 +278,7 @@ $ exit
 </details>
 
 
-### 手順6-terraform destroy
+### ＜手順6＞-terraform destroy
 ##### リソース情報取得-削除対象を認識する
 * 今回Terraformで作ったリソースはtagを入れているので、tagがついたリソースを、AWS CLIで取得
   * 公式）https://awscli.amazonaws.com/v2/documentation/api/latest/reference/resourcegroupstaggingapi/get-resources.html
