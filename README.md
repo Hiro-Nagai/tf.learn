@@ -16,7 +16,7 @@
 
 ## 今回作成する構成図
 VPC(sb2つ,各SG,EP),EC2,RDS,ALB,S3
-![構成図](https://raw.githubusercontent.com/Hiro-Nagai/tf.learn/main/image.tf.learn.png)
+![構成図](https://raw.githubusercontent.com/Hiro-Nagai/tf.learn/main/tf.learn.png)
 
 ## フォルダ構成
 
